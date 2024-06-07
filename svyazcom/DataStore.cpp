@@ -15,9 +15,8 @@ void DataStore::resize(size_t newCapacity) {
     Object* newData = new Object[newCapacity];
     size_t newSize = std::min(size, newCapacity);
     for (size_t i = 0; i < newSize; ++i) {
-        newData[i] = std::move(data[i]); // Using std::move for safe object transfer
-    }
-    delete[] data; // Properly delete the old data array
+        newData[i] = std::move(data[i]);     }
+    delete[] data; 
     data = newData;
     capacity = newCapacity;
     size = newSize;
@@ -30,17 +29,17 @@ int DataStore::getSize() {
 
 void DataStore::addObject(const Object& obj) {
     if (size >= capacity) {
-        resize(capacity * 2); // Double the capacity if the current size exceeds the capacity
+        resize(capacity * 2); 
     }
-    data[size++] = obj; // Add the object and increment size
+    data[size++] = obj; 
 }
 
 void DataStore::addVersion(const Version& ver, time_t fd, int indexObject) {
     if (indexObject >= capacity) {
-        resize(capacity * 2); // Increase size if index exceeds current capacity
+        resize(capacity * 2);
     }
     if (indexObject >= size) {
-        size = indexObject + 1; // Update size if index is larger than current size
+        size = indexObject + 1; 
     }
     data[indexObject].versions[fd] = ver;
 }
@@ -61,7 +60,7 @@ const std::pair<Object, Version> DataStore::findVersion(const std::string& key, 
             r = mid - 1;
         }
     }
-    return {Object(),Version()}; // Return nullptr if the key is not found
+    return { Object(),Version() };
 }
 
 const Version* Object::findVersion(time_t time) const {

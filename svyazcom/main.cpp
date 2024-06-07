@@ -47,7 +47,7 @@ void addDataFromCsv(DataStore& dataStore, const std::string filename, char separ
     if (std::getline(stream, title)) { // читаем заголовок
         std::string carryKey = "";
         auto titleData = split(removeQuotes(title), separator);
-        int index = dataStore.getSize();
+        int index = 0;
         while (std::getline(stream, line)) {
             Object instance;
             auto instanceData = split(removeQuotes(line), separator);
@@ -100,7 +100,7 @@ std::string anyToString(const std::any& a) {
 }
 std::string resultToString(std::pair<Object, Version>& objVer) {
     std::string result = objVer.first.toString();
-    result += " rid: " + objVer.second.rid;
+    result += " rid: " + std::to_string(objVer.second.rid);
     result += " fd: " + std::to_string(objVer.second.fd);
     result += " td: " + std::to_string(objVer.second.td);
     for (std::pair<std::string, std::any> item : objVer.second.other) {
@@ -112,7 +112,7 @@ std::string resultToString(std::pair<Object, Version>& objVer) {
 int main()
 {
     DataStore data;
-    addDataFromCsv(data, "currency_rates.csv", ';');
-    std::pair<Object, Version> result = data.findVersion("202010000000000.202019999999999", stotime("1451606400"));
+    addDataFromCsv(data, "imsi.csv", ';');
+    std::pair<Object, Version> result = data.findVersion("202050000000000.202059999999999", stotime("1451606401"));
     std::cout << resultToString(result);
 }
