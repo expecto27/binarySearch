@@ -129,11 +129,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CsvReader.cpp" />
     <ClCompile Include="DataStore.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Models.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CsvReader.h" />
+    <ClInclude Include="CurrencyRates.h" />
     <ClInclude Include="DataStore.h" />
+    <ClInclude Include="Imsi.h" />
+    <ClInclude Include="Models.h" />
+    <ClInclude Include="Prices.h" />
+    <ClInclude Include="TcRelationsCdr.h" />
+    <ClInclude Include="TcRelationTap.h" />
+    <ClInclude Include="Zones.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
