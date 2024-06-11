@@ -15,5 +15,6 @@ private:
 	static void readTcRelationsCdr(DataStore& data);
 	static void readTcRelationTap(DataStore& data);
 public:
+	static std::vector<std::vector<std::string>> readTests();
 	static void read(DataStore& data);
 };

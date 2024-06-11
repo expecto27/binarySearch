@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <memory>
 
 class Version {
 private:
@@ -17,6 +18,7 @@ public:
 
     time_t getFd() const { return fd; }
     void setFd(time_t value) { fd = value; }
+
 
     time_t getTd() const { return td; }
     void setTd(time_t value) { td = value; }
@@ -33,6 +35,7 @@ private:
     std::vector<std::shared_ptr<Version>> versions;
     bool isCorrect;
     std::shared_ptr<Version> binarySearch(time_t time);
+    std::shared_ptr<Version> binarySearchByRid(unsigned int rid);
 public:
     Object() : isCorrect(true), indexLastFound(-1) {}
     const std::string& getKey() const { return key; }
@@ -47,6 +50,10 @@ public:
 
     std::shared_ptr<Version> findVersion(time_t time) {
         return binarySearch(time);
+    }
+    
+    std::shared_ptr<Version> findVersionByRid(unsigned int rid) {
+        return binarySearchByRid(rid);
     }
 
     std::string toString();

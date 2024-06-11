@@ -11,6 +11,36 @@ std::string Object::toString() {
     return result;
 }
 
+
+std::shared_ptr<Version> Object::binarySearchByRid(const unsigned int rid) {
+    int left = 0;
+    int right = versions.size() - 1;
+
+    if (indexLastFound != -1 && indexLastFound >= left && indexLastFound <= right) {
+        const auto& version = versions[indexLastFound];
+        if (version->getRid() == rid) {
+            return version;
+        }
+    }
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        const auto& version = versions[mid];
+
+        if (version->getRid() == rid) {
+            indexLastFound = mid;
+            return version;
+        }
+        if (version->getRid() < rid) {
+            left = mid + 1;
+        }
+        else {
+            right = mid - 1;
+        }
+    }
+    return nullptr;
+}
+
 std::shared_ptr<Version> Object::binarySearch(const time_t time) {
     int left = 0;
     int right = versions.size() - 1;
@@ -40,9 +70,6 @@ std::shared_ptr<Version> Object::binarySearch(const time_t time) {
     return nullptr;
 }
 void Object::mergeData() {
-    std::sort(versions.begin(), versions.end(), [](const std::shared_ptr<Version>& p1, const std::shared_ptr<Version>& p2) {
-        return p1->getFd() < p2->getFd();
-        });
 
     for (int i = 0; i < versions.size() - 1; ++i) {
         if (versions[i]->getTd() > versions[i + 1]->getFd()) {

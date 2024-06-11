@@ -50,7 +50,7 @@ void CsvReader::readImsi(DataStore& data) {
 
                 instance->setKey(instanceData[3]);
                 if (instance->getKey() != carryKey) {
-                    data.addObject(instance);
+                    data.addObject(instance, "imsi");
                 }
 
                 carryKey = instanceData.at(3);
@@ -72,7 +72,7 @@ void CsvReader::readImsi(DataStore& data) {
                 if (instanceData.size() > 8 && instanceData.at(8) != "")
                     imsiVer->setImsi_region(std::stoul(instanceData.at(8)));
 
-                data.addVersion(imsiVer, instance->getKey());
+                data.addVersion(imsiVer, instance->getKey(), "imsi");
             }
         }
 }
@@ -92,7 +92,7 @@ void CsvReader::readPrices(DataStore& data) {
 
             instance->setKey(instanceData[3]);
             if (instance->getKey() != carryKey) {
-                data.addObject(instance);
+                data.addObject(instance, "prices");
             }
             carryKey = instanceData.at(3);
             Prices ver;
@@ -121,7 +121,7 @@ void CsvReader::readPrices(DataStore& data) {
             if (instanceData.at(21) != "")pricesVer->setRepriceMode(std::stoul(instanceData.at(21)));
             if (instanceData.size() > 22 && instanceData.at(22) != "")pricesVer->setP_fd(instanceData.at(22));
 
-            data.addVersion(pricesVer, instance->getKey());
+            data.addVersion(pricesVer, instance->getKey(), "prices");
         }
     }
 }
@@ -141,7 +141,7 @@ void CsvReader::readZones(DataStore& data) {
 
             instance->setKey(instanceData[3]);
             if (instance->getKey() != carryKey) {
-                data.addObject(instance);
+                data.addObject(instance, "zones");
             }
 
             carryKey = instanceData.at(0);
@@ -159,7 +159,7 @@ void CsvReader::readZones(DataStore& data) {
             if (instanceData.at(9) != "") zonesVer->setOperatorZoneId(std::stoul(instanceData.at(9)));
             if (instanceData.size() > 10 && instanceData.at(10) != "") zonesVer->setConnTypeId(std::stoul(instanceData.at(10)));
 
-            data.addVersion(zonesVer, instance->getKey());
+            data.addVersion(zonesVer, instance->getKey(), "zones");
         }
     }
 }
@@ -179,7 +179,7 @@ void CsvReader::readCurrencyRates(DataStore& data) {
 
             instance->setKey(instanceData[3]);
             if (instance->getKey() != carryKey) {
-                data.addObject(instance);
+                data.addObject(instance, "currency_rates");
             }
 
 
@@ -194,13 +194,13 @@ void CsvReader::readCurrencyRates(DataStore& data) {
             if (instanceData.at(5) != "") currencyRatesVer->setToId(std::stoul(instanceData.at(5)));
             if (instanceData.size() > 6 && instanceData.at(6) != "") currencyRatesVer->setRate(std::stod(instanceData.at(6)));
 
-            data.addVersion(currencyRatesVer, instance->getKey());
+            data.addVersion(currencyRatesVer, instance->getKey(), "currency_rates");
         }
     }
 }
 
 void CsvReader::readTcRelationTap(DataStore& data) {
-    std::ifstream stream("tc_relation_tap.csv");
+    std::ifstream stream("tc_relations_tap.csv");
     std::string title;
     std::string line;
 
@@ -214,7 +214,7 @@ void CsvReader::readTcRelationTap(DataStore& data) {
 
             instance->setKey(instanceData[3]);
             if (instance->getKey() != carryKey) {
-                data.addObject(instance);
+                data.addObject(instance, "tc_relations_tap");
             }
 
 
@@ -239,9 +239,22 @@ void CsvReader::readTcRelationTap(DataStore& data) {
             if (instanceData.at(16) != "") tcRelationTapVer->setIotThreshold(std::stoul(instanceData.at(16)));
             if (instanceData.size() > 17 && instanceData.at(17) != "") tcRelationTapVer->setIotDebug(std::stoul(instanceData.at(17)));
 
-            data.addVersion(tcRelationTapVer, instance->getKey());
+            data.addVersion(tcRelationTapVer, instance->getKey(), "tc_relations_tap");
         }
     }
+}
+
+std::vector < std::vector < std::string >> CsvReader::readTests() {
+    std::ifstream stream("test.csv");
+    std::string line;
+    std::vector < std::vector < std::string >> res;
+    if (std::getline(stream, line)) {
+        while (std::getline(stream, line)) {
+            auto instanceData = split(removeQuotes(line), ';');
+            res.push_back(instanceData);
+        }
+    }
+    return res;
 }
 
 void CsvReader::readTcRelationsCdr(DataStore& data) {
@@ -260,7 +273,7 @@ void CsvReader::readTcRelationsCdr(DataStore& data) {
 
             instance->setKey(instanceData[3]);
             if (instance->getKey() != carryKey) {
-                data.addObject(instance);
+                data.addObject(instance, "tc_relations_cdr");
             }
 
             carryKey = instanceData.at(3);
@@ -280,7 +293,7 @@ void CsvReader::readTcRelationsCdr(DataStore& data) {
             if (instanceData.at(12) != "") tcRelationsCdrVer->setTaskRid(std::stoul(instanceData.at(12)));
             if (instanceData.size() > 13 && instanceData.at(13) != "") tcRelationsCdrVer->setNumberTypes(instanceData.at(13));
 
-            data.addVersion(tcRelationsCdrVer, instance->getKey());
+            data.addVersion(tcRelationsCdrVer, instance->getKey(), "tc_relations_cdr");
         }
     }
 }
@@ -292,5 +305,5 @@ void CsvReader::read(DataStore& data) {
     readTcRelationsCdr(data);
     readTcRelationTap(data);
     readZones(data);
-    data.merge();
+    data.murge();
 }
