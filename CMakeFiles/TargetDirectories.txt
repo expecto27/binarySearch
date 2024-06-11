@@ -1,4 +1,0 @@
-C:/Users/shink/source/repos/svyazcom/CMakeFiles/SvyazcomLib.dir
-C:/Users/shink/source/repos/svyazcom/CMakeFiles/SvyazcomProject.dir
-C:/Users/shink/source/repos/svyazcom/CMakeFiles/ALL_BUILD.dir
-C:/Users/shink/source/repos/svyazcom/CMakeFiles/ZERO_CHECK.dir
