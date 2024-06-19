@@ -24,7 +24,7 @@ add_library(
 )
 
 add_executable(
-    SvyazcomProject ${SOURCE_FILES}
+    SvyazcomProject 
         svyazcom/main.cpp
 )
 
