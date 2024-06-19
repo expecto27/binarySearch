@@ -42,5 +42,6 @@ public:
     }
 
     std::string findVersion(const std::string& key, std::string time, std::string objectType);
-    std::string findVersion(const std::string& key, unsigned int rid, std::string objectType);
+    std::string findVersion(const std::string& key, time_t time, std::string objectType);
+    std::string findRid(const std::string& key, unsigned int rid, std::string objectType);
 };

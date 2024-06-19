@@ -1,9 +1,9 @@
 #include "DataParser.h"
 #include <memory>
 
-void DataParser::parseImsi(const std::vector<std::vector<std::string>>& csvData, DataStore& data) {
+void DataParser::parseImsi(std::vector<std::vector<std::string>>&& csvData, DataStore& data) {
     std::string carryKey = "";
-    for (const auto& instanceData : csvData) {
+    for (auto&& instanceData : csvData) {
         std::shared_ptr<Object> instance = std::make_shared<Object>();
         instance->setKey(instanceData[3]);
         if (instance->getKey() != carryKey) {
@@ -11,7 +11,7 @@ void DataParser::parseImsi(const std::vector<std::vector<std::string>>& csvData,
         }
         carryKey = instanceData[3];
 
-        std::shared_ptr<Imsi> imsiVer = std::make_shared<Imsi>(instanceData);
+        std::shared_ptr<Imsi> imsiVer = std::make_shared<Imsi>(std::move(instanceData));
 
 
         data.addVersion(imsiVer, instance->getKey(), "imsi");

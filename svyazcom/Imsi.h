@@ -13,7 +13,7 @@ private:
 public:
     Imsi() : tap_code_id(0), filial_id(0), imsi_region(0) {}
     
-    Imsi(const std::vector<std::string>& data) {
+    Imsi(std::vector<std::string>&& data) {
         if (data.size() >= 6) {
             rid = std::stoul(data[0]);
             fd = static_cast<time_t>(std::stoull(data[1]));

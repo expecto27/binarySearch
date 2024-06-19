@@ -26,6 +26,18 @@ std::string DataStore::findVersion(const std::string& key, std::string timeStr, 
     return std::to_string(ver->getRid());
 }
 
-std::string DataStore::findVersion(const std::string& key, unsigned int rid, std::string objectType) {
+std::string DataStore::findVersion(const std::string& key, time_t time, std::string objectType) {
+    auto ver = data[objectType][key]->findVersion(time);
+
+    if (ver == nullptr) {
+        return "null";
+    }
+    if (!(data[objectType][key]->getIsCorrect())) {
+        return "error";
+    }
+    return std::to_string(ver->getRid());
+}
+
+std::string DataStore::findRid(const std::string& key, unsigned int rid, std::string objectType) {
     return data[objectType][key]->findVersionByRid(rid)->toString();
 }
