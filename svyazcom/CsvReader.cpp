@@ -16,11 +16,7 @@ std::vector<std::string> CsvReader::split(const std::string& str, char separator
 
 std::string CsvReader::removeQuotes(const std::string& str) {
     std::string result;
-    for (char c : str) {
-        if (c != '\"') {
-            result += c;
-        }
-    }
+    std::copy_if(str.begin(), str.end(), std::back_inserter(result), [](const auto &c){return c != '\"';});
     return result;
 }
 

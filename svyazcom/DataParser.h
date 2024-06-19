@@ -13,7 +13,7 @@
 
 class DataParser {
 public:
-    static void parseImsi(const std::vector<std::vector<std::string>>& csvData, DataStore& data);
+    static void parseImsi(std::vector<std::vector<std::string>>&& csvData, DataStore& data);
     static void parsePrices(const std::vector<std::vector<std::string>>& csvData, DataStore& data);
     static void parseZones(const std::vector<std::vector<std::string>>& csvData, DataStore& data);
     static void parseCurrencyRates(const std::vector<std::vector<std::string>>& csvData, DataStore& data);
