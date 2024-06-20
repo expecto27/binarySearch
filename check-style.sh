@@ -11,7 +11,7 @@ function clang_format() {
 }
 
 tmpfile="tmpfile.$RANDOM"
-find src -iname "*.cpp" -o -iname "*.hpp" > "$tmpfile"
+find svyazcom -iname "*.cpp" -o -iname "*.h" > "$tmpfile"
 ec=0
 while read -r file; do
     if ! clang_format "$file"; then

@@ -1,7 +1,9 @@
-#include <iostream>
 #include "Models.h"
-#include "Imsi.h"
+
+#include <iostream>
 #include <string>
+
+#include "Imsi.h"
 
 std::string Object::toString() {
     std::string result = "";
@@ -21,7 +23,7 @@ std::shared_ptr<Version> Object::binarySearch(const time_t time) {
     }
 
     while (left <= right) {
-        int mid = left + (right - left) / 2;
+        int         mid = left + (right - left) / 2;
         const auto& version = versions[mid];
 
         if (version->getFd() <= time && version->getTd() >= time) {
@@ -30,8 +32,7 @@ std::shared_ptr<Version> Object::binarySearch(const time_t time) {
         }
         if (version->getFd() < time) {
             left = mid + 1;
-        }
-        else {
+        } else {
             right = mid - 1;
         }
     }

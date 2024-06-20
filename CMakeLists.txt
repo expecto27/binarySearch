@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 
 project(SvyazcomProject VERSION 1.0)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # prohibit in-source-builds
@@ -38,7 +38,6 @@ set(SOURCE_FILES
     svyazcom/CsvReader.cpp
     svyazcom/DataStore.cpp
     svyazcom/Models.cpp
-    svyazcom/DataParser.cpp
 )
 
 add_library(
@@ -47,14 +46,14 @@ add_library(
 )
 
 add_executable(
-    SvyazcomProject 
+    SvyazcomProject
         svyazcom/main.cpp
 )
 
 target_link_libraries(
-    SvyazcomProject 
+    SvyazcomProject
         SvyazcomLib
-        fmt::fmt 
+        fmt::fmt
         cxxopts::cxxopts
 )
 

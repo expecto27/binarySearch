@@ -1,7 +1,9 @@
 #include "DataStore.h"
-#include "Models.h"
+
 #include <algorithm>
 #include <utility>
+
+#include "Models.h"
 
 DataStore::DataStore() {}
 
@@ -15,7 +17,7 @@ void DataStore::addVersion(std::shared_ptr<Version> ver, std::string keyObject, 
 
 std::string DataStore::findVersion(const std::string& key, std::string timeStr, std::string objectType) {
     time_t time = static_cast<time_t>(std::stoull(timeStr));
-    auto ver = data[objectType][key]->findVersion(time);
+    auto   ver = data[objectType][key]->findVersion(time);
 
     if (ver == nullptr) {
         return "null";
