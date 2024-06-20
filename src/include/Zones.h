@@ -4,6 +4,9 @@
 
 #include "Models.h"
 
+namespace svyazcom {
+namespace clr {
+
 class Zones : public Version {
     public:
         inline static const std::string name = "zones";
@@ -20,7 +23,7 @@ class Zones : public Version {
     public:
         Zones() : id(0), operator_id(0), operator_zone_id(0), conn_type_id(0) {}
 
-        explicit Zones(std::vector<std::string>&& data) {
+        explicit Zones(csvreader::row_t&& data) {
             if (!data[0].empty()) rid = std::stoul(data[0]);
             if (!data[1].empty()) fd = static_cast<time_t>(std::stoull(data[1]));
             if (!data[2].empty()) td = static_cast<time_t>(std::stoull(data[2]));
@@ -65,3 +68,5 @@ class Zones : public Version {
         unsigned int getConnTypeId() const { return conn_type_id; }
         void         setConnTypeId(unsigned int value) { conn_type_id = value; }
 };
+
+}} //namespace svyazcom::clr

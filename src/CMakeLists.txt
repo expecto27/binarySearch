@@ -2,10 +2,21 @@ include_directories(include)
 
 set(
     SOURCE_FILES
-        CsvReader.cpp
         DataStore.cpp
         Models.cpp
 )
+
+add_library(
+    csvreader-lib
+        CsvReader.cpp
+)
+
+target_link_libraries(
+    csvreader-lib
+        lazycsv::lazycsv
+        fmt::fmt
+)
+
 
 add_library(
     ${CMAKE_PROJECT_NAME}-lib
@@ -21,12 +32,11 @@ target_link_libraries(
     ${CMAKE_PROJECT_NAME}
         ${CMAKE_PROJECT_NAME}-lib
         ${REQUIRED_LIBRARIES}
+        csvreader-lib
 )
 
-file(GLOB CSV_FILES "${PROJECT_SOURCE_DIR}/data/*.csv")
-foreach(CSV_FILE ${CSV_FILES})
-    add_custom_command(
-        TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy ${CSV_FILE} $<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}>
-    )
-endforeach()
+install(
+    TARGETS ${CMAKE_PROJECT_NAME}
+    RUNTIME DESTINATION ${PROJECT_SOURCE_DIR}/bin
+)
+    

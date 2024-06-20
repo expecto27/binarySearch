@@ -2,6 +2,9 @@
 #include "Models.h"
 #include "iostream"
 
+namespace svyazcom {
+namespace clr {
+
 class CurrencyRates : public Version {
     public:
         inline static const std::string name = "currency_rates";
@@ -14,7 +17,7 @@ class CurrencyRates : public Version {
     public:
         CurrencyRates() {}
 
-        explicit CurrencyRates(std::vector<std::string>&& data) {
+        explicit CurrencyRates(csvreader::row_t&& data) {
             if (!data[0].empty()) rid = std::stoul(data[0]);
             if (!data[1].empty()) fd = static_cast<time_t>(std::stoull(data[1]));
             if (!data[2].empty()) td = static_cast<time_t>(std::stoull(data[2]));
@@ -40,3 +43,5 @@ class CurrencyRates : public Version {
         void setToId(unsigned int value) { to_id = value; }
         void setRate(double value) { rate = value; }
 };
+
+}} //namespace svyazcom::clr

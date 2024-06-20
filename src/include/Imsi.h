@@ -1,6 +1,10 @@
 #pragma once
 #include "iostream"
 #include "Models.h"
+
+namespace svyazcom {
+namespace clr {
+
 class Imsi : public Version {
 public:
     inline static const std::string name = "imsi";
@@ -15,7 +19,7 @@ private:
 public:
     Imsi() : tap_code_id(0), filial_id(0), imsi_region(0) {}
 
-    explicit Imsi(std::vector<std::string>&& data) {
+    explicit Imsi(csvreader::row_t&& data) {
         rid = std::stoul(data[0]);
         fd = static_cast<time_t>(std::stoull(data[1]));
         td = static_cast<time_t>(std::stoull(data[2]));
@@ -54,3 +58,5 @@ public:
     const unsigned int getImsi_region() const { return imsi_region; }
     void setImsi_region(const unsigned int value) { imsi_region = value; }
 };
+
+}} //namespace svyazcom::clr

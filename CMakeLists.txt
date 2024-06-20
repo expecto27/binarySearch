@@ -1,9 +1,11 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.20)
 
-project(version-search VERSION 1.0)
+project(version-search)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR})
 
 # prohibit in-source-builds
 IF (${CMAKE_BINARY_DIR} STREQUAL ${CMAKE_SOURCE_DIR})
@@ -27,14 +29,12 @@ if (CMAKE_CXX_CPPCHECK)
     )
 endif()
 
-
 set(REQUIRED_LIBRARIES)
 
 find_package(fmt)
 list(APPEND REQUIRED_LIBRARIES fmt::fmt)
 
-find_package(cxxopts)
-list(APPEND REQUIRED_LIBRARIES cxxopts::cxxopts)
+find_package(lazycsv)
 
 add_subdirectory(src)
 

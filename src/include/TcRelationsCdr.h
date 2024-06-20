@@ -4,6 +4,9 @@
 
 #include "Models.h"
 
+namespace svyazcom {
+namespace clr {
+
 class TcRelationsCdr : public Version {
     public:
         inline static const std::string name = "tc_relations_cdr";
@@ -23,7 +26,7 @@ class TcRelationsCdr : public Version {
     public:
         TcRelationsCdr() {}
 
-        explicit TcRelationsCdr(std::vector<std::string>&& data) {
+        explicit TcRelationsCdr(csvreader::row_t&& data) {
             if (!data.at(0).empty()) rid = std::stoul(data.at(0));
             if (!data.at(1).empty()) fd = static_cast<time_t>(std::stoull(data.at(1)));
             if (!data.at(2).empty()) td = static_cast<time_t>(std::stoull(data.at(2)));
@@ -81,3 +84,6 @@ class TcRelationsCdr : public Version {
         const std::string& getNumberTypes() const { return number_types; }
         void               setNumberTypes(const std::string& value) { number_types = value; }
 };
+
+
+}} //namespace svyazcom::clr

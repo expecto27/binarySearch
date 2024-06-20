@@ -16,32 +16,38 @@
 #include "TcRelationsCdr.h"
 #include "Zones.h"
 
+namespace svyazcom {
+namespace clr {
 
 class DataStore {
+    public:
+        typedef std::string key_t;
+        typedef std::unordered_map<key_t, Object::object_ptr>> instances_t;
+        typedef std::unordered_map<key_t, instances_t> entities_t;
+
     private:
-        // entity -> key -> [version, ...]
-        std::unordered_map<std::string, std::unordered_map<std::string, std::shared_ptr<Object>>> data;
+        entities_t data;
 
     public:
         DataStore();
-        void addVersion(std::shared_ptr<Version> ver, std::string keyObject, std::string objectType);
-        void addObject(std::shared_ptr<Object> obj, std::string objectType);
+        void addVersion(Version::version_ptr ver, std::string keyObject, std::string objectType);
+        void addObject(Object::object_ptr obj, std::string objectType);
 
-        bool getIsCorrect(std::string key, std::string objType) { return data[objType][key]->getIsCorrect(); }
+        bool getis_valid(std::string key, std::string objType) { return data[objType][key]->getis_valid(); }
 
         std::string toString(std::string key, std::string objType) { return data[objType][key]->toString(); }
 
         void murge() {
             for (const auto& outerPair : data) {
-                const std::unordered_map<std::string, std::shared_ptr<Object>>& innerMap = outerPair.second;
+                const std::unordered_map<std::string, Object::object_ptr>& innerMap = outerPair.second;
                 for (const auto& innerPair : innerMap) {
-                    std::shared_ptr<Object> obj = innerPair.second;
+                    Object::object_ptr obj = innerPair.second;
                     obj->mergeData();
                 }
             }
         }
 
-        std::string findVersion(const std::string& key, std::string time, std::string objectType);
-        std::string findVersion(const std::string& key, time_t time, std::string objectType);
-        std::string findRid(const std::string& key, unsigned int rid, std::string objectType);
+        std::string VersionSearch(const std::string& object, const std::string& key, const time_t time);
 };
+
+}} //namespace svyazcom::clr

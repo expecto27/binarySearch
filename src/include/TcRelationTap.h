@@ -4,6 +4,9 @@
 
 #include "Models.h"
 
+namespace svyazcom {
+namespace clr {
+
 class TcRelationTap : public Version {
     public:
         inline static const std::string name = "tc_relations_tap";
@@ -27,7 +30,7 @@ class TcRelationTap : public Version {
     public:
         TcRelationTap() {}
 
-        explicit TcRelationTap(std::vector<std::string>&& data) {
+        explicit TcRelationTap(csvreader::row_t&& data) {
             if (!data.at(0).empty()) rid = std::stoul(data.at(0));
             if (!data.at(1).empty()) fd = static_cast<time_t>(std::stoull(data.at(1)));
             if (!data.at(2).empty()) td = static_cast<time_t>(std::stoull(data.at(2)));
@@ -105,3 +108,4 @@ class TcRelationTap : public Version {
         void         setIotDebug(unsigned int value) { iot_debug = value; }
 };
 
+}} //namespace svyazcom::clr

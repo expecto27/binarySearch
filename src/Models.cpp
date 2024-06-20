@@ -5,18 +5,21 @@
 
 #include "Imsi.h"
 
+namespace svyazcom {
+namespace clr {
+
 std::string Object::toString() {
     std::string result = "";
     result += "Key: " + this->key;
     return result;
 }
 
-std::shared_ptr<Version> Object::binarySearch(const time_t time) {
+Version::version_ptr Object::binarySearch(const time_t time) {
     int left = 0;
     int right = versions.size() - 1;
 
-    if (indexLastFound != -1 && indexLastFound >= left && indexLastFound <= right) {
-        const auto& version = versions[indexLastFound];
+    if (index_last_found != -1 && index_last_found >= left && index_last_found <= right) {
+        const auto& version = versions[index_last_found];
         if (version->getFd() <= time && version->getTd() >= time) {
             return version;
         }
@@ -27,7 +30,7 @@ std::shared_ptr<Version> Object::binarySearch(const time_t time) {
         const auto& version = versions[mid];
 
         if (version->getFd() <= time && version->getTd() >= time) {
-            indexLastFound = mid;
+            index_last_found = mid;
             return version;
         }
         if (version->getFd() < time) {
@@ -42,7 +45,9 @@ std::shared_ptr<Version> Object::binarySearch(const time_t time) {
 void Object::mergeData() {
     for (int i = 0; i < versions.size() - 1; ++i) {
         if (versions[i]->getTd() > versions[i + 1]->getFd()) {
-            this->setIsCorrect(false);
+            this->setis_valid(false);
         }
     }
 }
+
+}} //namespace svyazcom::clr

@@ -4,6 +4,10 @@
 
 #include "Models.h"
 
+namespace svyazcom {
+namespace clr {
+
+
 class Prices : public Version {
     public:
         inline static const std::string name = "prices";
@@ -47,7 +51,7 @@ class Prices : public Version {
               cl(0),
               reprice_mode(0) {}
 
-        explicit Prices(std::vector<std::string>&& data) {
+        explicit Prices(csvreader::row_t&& data) {
             if (!data[0].empty()) rid = std::stoul(data[0]);
             if (!data[1].empty()) fd = static_cast<time_t>(std::stoull(data[1]));
             if (!data[2].empty()) td = static_cast<time_t>(std::stoull(data[2]));
@@ -143,3 +147,6 @@ class Prices : public Version {
         const std::string& getP_fd() const { return p_fd; }
         void               setP_fd(const std::string& value) { p_fd = value; }
 };
+
+
+}} //namespace svyazcom::clr

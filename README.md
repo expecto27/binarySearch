@@ -1,9 +1,12 @@
+## Abstract
 
+    ClearingManager entities version search library and version checker utility
 
+## Description 
+
+    
 
 ## Preinstall
-
-For linux ubuntu
 
     sudo apt install python3
     pip install conan

@@ -1,4 +1,6 @@
 #pragma once
+
+//FIXME move into types.hpp
 #include <algorithm>
 #include <iostream>
 #include <memory>
@@ -6,7 +8,13 @@
 #include <unordered_map>
 #include <vector>
 
+namespace svyazcom {
+namespace clr {
+
 class Version {
+
+    typedef std::shared_ptr<Version> version_ptr;
+
     protected:
         unsigned int rid;
         time_t       fd;
@@ -34,38 +42,46 @@ template<typename T>
 concept VersionT = std::is_base_of_v<Version, T>;
 
 class Object {
+    public:
+        typedef std::shared_prt<Object> object_ptr;
+        typedef std::vector<Version::version_ptr> versions_t;
+        typedef std::unordered_map<unsigned int, Version::version_ptr> versions_rid_t;
+
     private:
-        std::string                           key;
-        int                                   indexLastFound;
-        std::vector<std::shared_ptr<Version>> versions;
-        bool                                  isCorrect;
+        std::string  key;
+        int          index_last_found;
+        versions_t   versions;
+        bool         is_valid;
 
-        std::unordered_map<unsigned int, std::shared_ptr<Version>> versionsByRid;
+        versions_rid versions_by_rid;
 
-        std::shared_ptr<Version> binarySearch(time_t time);
+        Version::version_ptr binarySearch(time_t time);
 
     public:
-        Object() : isCorrect(true), indexLastFound(-1) {}
+        Object() : is_valid(true), index_last_found(-1) {}
         const std::string& getKey() const { return key; }
         void               setKey(const std::string& value) { key = value; }
 
-        void addVersions(std::shared_ptr<Version> value) {
+        void addVersions(Version::version_ptr value) {
             versions.push_back(value);
-            versionsByRid[value->getRid()] = value;
+            versions_by_rid[value->getRid()] = value;
         }
 
         void mergeData();
-        bool getIsCorrect() const { return isCorrect; }
-        void setIsCorrect(bool value) { isCorrect = value; }
+        bool getis_valid() const { return is_valid; }
+        void setis_valid(bool value) { is_valid = value; }
 
-        std::shared_ptr<Version> findVersion(time_t time) { return binarySearch(time); }
+        Version::version_ptr VersionSearch(time_t time) { return binarySearch(time); }
 
-        std::shared_ptr<Version> findVersionByRid(unsigned int rid) {
-            auto it = versionsByRid.find(rid);
-            if (it != versionsByRid.end()) {
+        Version::version_ptr VersionByRid(unsigned int rid) {
+            auto const &it = versions_by_rid.find(rid);
+            if (it != versions_by_rid.end()) {
                 return it->second;
             }
             return nullptr;
         }
         std::string toString();
 };
+
+
+}} //namespace svyazcom::clr
