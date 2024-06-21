@@ -8,70 +8,89 @@
 #include <unordered_map>
 #include <vector>
 
+/*! terminalogy
+ *
+ *  Entity - набор обьектов одной сущности определемых однотипным набором атрибутов и их значений
+ *  Object - уникальный обьект сущности, идентифицируемый ключем key
+ *  Version - версия обьекта
+ *
+ */
+
 namespace svyazcom {
 namespace clr {
 
+/*!@class Version
+ * Object version with unique rid, base class for other entity version
+ * @member rid unique identitfier for version
+ * @member fd unix time, start of version existance
+ * @member td unix time, end if version existsance
+ */
 class Version {
 
     typedef std::shared_ptr<Version> version_ptr;
 
     protected:
-        unsigned int rid;
-        time_t       fd;
-        time_t       td;
+        const unsigned int rid;
+        const time_t       fd;
+        const time_t       td;
 
     public:
-        Version() : rid(0), fd(0), td(0) {}
+        Version(
+            const unsigned int rid,
+            const time_t fd,
+            const time_t td
+        )
+        : rid{rid}, fd{fd}, td{td} {}
 
-        unsigned int getRid() const { return rid; }
-        void         setRid(unsigned int value) { rid = value; }
-
-        time_t getFd() const { return fd; }
-        void   setFd(time_t value) { fd = value; }
-
-        time_t getTd() const { return td; }
-        void   setTd(time_t value) { td = value; }
-
-        virtual std::string toString() const {
-            return " rid: " + std::to_string(this->rid) + " fd: " + std::to_string(this->fd) +
-                   " td: " + std::to_string(this->td);
-        }
+        virtual ~Version() = default;
 };
 
+/*!@concept VersionT
+ * Define types derived from Version
+ */
 template<typename T>
 concept VersionT = std::is_base_of_v<Version, T>;
 
+/*!@class Object
+ * Objects entitity identified by unique key, consists of vector of verions order by start time
+ * @note version must not by overlapped in time [fd:td]
+*/
 class Object {
     public:
-        typedef std::shared_prt<Object> object_ptr;
-        typedef std::vector<Version::version_ptr> versions_t;
-        typedef std::unordered_map<unsigned int, Version::version_ptr> versions_rid_t;
+        typedef std::vector<const Version *> versions_t;
+        typedef std::unordered_map<unsigned int, const Version*> versions_rid_t;
 
     private:
-        std::string  key;
-        int          index_last_found;
-        versions_t   versions;
-        bool         is_valid;
 
-        versions_rid versions_by_rid;
+        const std::string  key;
 
-        Version::version_ptr binarySearch(time_t time);
+        /*!@member versions, vector of object version */
+        versions_t      versions;
+        /*!@member map of versions by rid */
+        versions_rid_t  versions_by_rid;
+
+        bool is_valid;
+        int  index_last_found;
+
+        const Version *Search(time_t time);
 
     public:
         Object() : is_valid(true), index_last_found(-1) {}
-        const std::string& getKey() const { return key; }
-        void               setKey(const std::string& value) { key = value; }
 
-        void addVersions(Version::version_ptr value) {
+        void VersionAdd(const Version *value) {
+
+            if (version->fd <= versions[versions.size()]->td) {
+                is_valid = false;
+            }
             versions.push_back(value);
-            versions_by_rid[value->getRid()] = value;
+            versions_by_rid[value->rid] = value;
         }
 
-        void mergeData();
-        bool getis_valid() const { return is_valid; }
-        void setis_valid(bool value) { is_valid = value; }
+        bool is_valid() const { return is_valid; }
 
-        Version::version_ptr VersionSearch(time_t time) { return binarySearch(time); }
+        const Version* VersionSearch(time_t time) {
+            return search(time);
+        }
 
         Version::version_ptr VersionByRid(unsigned int rid) {
             auto const &it = versions_by_rid.find(rid);
@@ -80,7 +99,6 @@ class Object {
             }
             return nullptr;
         }
-        std::string toString();
 };
 
 

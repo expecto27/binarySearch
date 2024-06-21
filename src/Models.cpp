@@ -8,32 +8,27 @@
 namespace svyazcom {
 namespace clr {
 
-std::string Object::toString() {
-    std::string result = "";
-    result += "Key: " + this->key;
-    return result;
-}
+const Version *Object::Search(const time_t time) {
 
-Version::version_ptr Object::binarySearch(const time_t time) {
     int left = 0;
     int right = versions.size() - 1;
 
     if (index_last_found != -1 && index_last_found >= left && index_last_found <= right) {
         const auto& version = versions[index_last_found];
-        if (version->getFd() <= time && version->getTd() >= time) {
+        if (version->fd <= time && version->td >= time) {
             return version;
         }
     }
 
     while (left <= right) {
-        int         mid = left + (right - left) / 2;
-        const auto& version = versions[mid];
+        int mid = left + (right - left) / 2;
+        auto const &version = versions[mid];
 
-        if (version->getFd() <= time && version->getTd() >= time) {
+        if (version->fd <= time && version->td >= time) {
             index_last_found = mid;
             return version;
         }
-        if (version->getFd() < time) {
+        if (version->fd < time) {
             left = mid + 1;
         } else {
             right = mid - 1;
@@ -44,7 +39,7 @@ Version::version_ptr Object::binarySearch(const time_t time) {
 
 void Object::mergeData() {
     for (int i = 0; i < versions.size() - 1; ++i) {
-        if (versions[i]->getTd() > versions[i + 1]->getFd()) {
+        if (versions[i]->td > versions[i + 1]->fd) {
             this->setis_valid(false);
         }
     }
