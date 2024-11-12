@@ -1,7 +1,13 @@
 #pragma once
 #include "iostream"
 #include "Models.h"
+
+namespace svyazcom {
+namespace clr {
+
 class Imsi : public Version {
+public:
+    inline static const std::string name = "imsi";
 
 private:
     std::string s_imsi;
@@ -12,19 +18,18 @@ private:
 
 public:
     Imsi() : tap_code_id(0), filial_id(0), imsi_region(0) {}
-    
-    Imsi(const std::vector<std::string>& data) {
-        if (data.size() >= 6) {
-            rid = std::stoul(data[0]);
-            fd = static_cast<time_t>(std::stoull(data[1]));
-            td = static_cast<time_t>(std::stoull(data[2]));
-            s_imsi = data[4];
-            e_imsi = data[5];
 
-            tap_code_id = data[6].empty() ? 0 : std::stoul(data[6]);
-            filial_id = data[7].empty() ? 0 : std::stoul(data[7]);
-            imsi_region = (data.size() > 8 && !data[8].empty()) ? std::stoul(data[8]) : 0;
-        }
+    explicit Imsi(csvreader::row_t&& data) {
+        rid = std::stoul(data[0]);
+        fd = static_cast<time_t>(std::stoull(data[1]));
+        td = static_cast<time_t>(std::stoull(data[2]));
+        s_imsi = data[4];
+        e_imsi = data[5];
+
+        tap_code_id = data.at(6).empty() ? 0 : std::stoul(data[6]);
+        filial_id = data.at(7).empty() ? 0 : std::stoul(data[7]);
+        imsi_region = (data.size() > 8 && !data[8].empty()) ? std::stoul(data[8]) : 0;
+
     }
 
     std::string toString() const override {
@@ -53,3 +58,5 @@ public:
     const unsigned int getImsi_region() const { return imsi_region; }
     void setImsi_region(const unsigned int value) { imsi_region = value; }
 };
+
+}} //namespace svyazcom::clr
